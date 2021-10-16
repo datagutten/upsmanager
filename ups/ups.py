@@ -26,6 +26,6 @@ class UpsInfo:
             return int(value)
         elif data_type == 'Timeticks':
             matches = re.match(r'([0-9]+):([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)', value)
-            return datetime.time(hour=int(matches[2]), minute=int(matches[3]), second=int(matches[4]))
-
-        return data
+            return datetime.time(hour=int(matches[2]), minute=int(matches[3]),
+                                 second=int(matches[4]))
+        return None
