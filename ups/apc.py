@@ -23,6 +23,14 @@ class ApcUps(UpsInfo):
         values = {'1': 'Unknown', '2': 'Normal', '3': 'Low battery'}
         return values[value]
 
+    def battery_voltage(self):
+        value = self.get('.1.3.6.1.4.1.318.1.1.1.2.3.4.0')
+        if value and type(value) == int:
+            return value/10
+
+    def battery_sku(self):
+        return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.19.0')
+
     def status(self):
         # upsAdvStateAbnormalConditions
         return self.get('.1.3.6.1.4.1.318.1.1.1.11.1.1.0')
