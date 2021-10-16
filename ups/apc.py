@@ -121,8 +121,9 @@ class ApcUps(UpsInfo):
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0')
 
     def temperature(self):
-        # return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.2.0')
-        return int(self.get('.1.3.6.1.4.1.318.1.1.1.2.3.2.0'))/10
+        temperature_string = self.get('.1.3.6.1.4.1.318.1.1.1.2.3.2.0')
+        if temperature_string:
+            return int(temperature_string)/10
 
     def input_voltage(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.3.2.1.0')
