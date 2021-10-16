@@ -111,6 +111,8 @@ class ApcUps(UpsInfo):
 
     def status_string(self):
         status = self.status()
+        if not status:
+            return ''
         strings = self.status_strings(status)
         messages = ''
         for value in strings:
