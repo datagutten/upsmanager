@@ -22,9 +22,9 @@
     </tr>
     {% for ups in ups_list %}
         <tr>
-            <td>{{ ups.ups.name }}</td>
-            <td>{{ ups.ups.ip }}</td>
             {% if not ups.error %}
+                <td>{{ ups.ups.name|default:ups.snmp.name }}</td>
+                <td>{{ ups.ups.ip }}</td>
                 <td title="{{ ups.snmp.battery_sku|default:"" }}">{{ ups.snmp.model }}</td>
                 <td>{{ ups.snmp.status_string|linebreaksbr }}</td>
                 {% if ups.snmp.battery %}
@@ -38,10 +38,15 @@
                 {% endif %}
                 <td>{{ ups.snmp.battery_voltage|default:"" }} V</td>
                 <td>{{ ups.snmp.input_voltage }} V</td>
-                <td><meter id="load" min="0" low="10" max="100" high="90" value="{{ ups.snmp.load }}" ></meter> {{ ups.snmp.load }}%</td>
+                <td>
+                    <meter id="load" min="0" low="10" max="100" high="90" value="{{ ups.snmp.load }}"></meter>
+                    {{ ups.snmp.load }}%
+                </td>
                 <td>{{ ups.snmp.battery_temperature }} C</td>
                 <td>{{ ups.snmp.runtime|time:"H:i" }}</td>
             {% else %}
+                <td>{{ ups.ups.name|default:"" }}</td>
+                <td>{{ ups.ups.ip }}</td>
                 <td colspan="8" class="error">{{ ups.error }}</td>
             {% endif %}
         </tr>
