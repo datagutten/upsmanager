@@ -3,10 +3,10 @@ import re
 
 import netsnmp
 
-import UPS
+from . import BaseUPS
 
 
-class SnmpUps(UPS):
+class SnmpUps(BaseUPS):
     def __init__(self, ip, community='public', version=0):
         self.session = netsnmp.SNMPSession(ip, community, version=version, timeout=0.1)
 

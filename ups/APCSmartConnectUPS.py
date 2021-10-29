@@ -3,10 +3,10 @@ import datetime
 from django.conf import settings
 from requests import HTTPError
 
-from . import APCSmartConnect, UPS
+from . import APCSmartConnect, BaseUPS
 
 
-class APCSmartConnectUPS(UPS):
+class APCSmartConnectUPS(BaseUPS):
     def __init__(self, _, key):
         key = int(key)
         super().__init__(key)

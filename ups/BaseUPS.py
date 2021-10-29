@@ -1,7 +1,7 @@
 from abc import ABC
 
 
-class UPS(ABC):
+class BaseUPS(ABC):
     def name(self) -> str:
         """
         Get UPS host name

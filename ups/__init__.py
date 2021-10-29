@@ -1,4 +1,4 @@
-from .UPS import UPS
+from .BaseUPS import BaseUPS
 from .SnmpUps import SnmpUps
 from .rfc import RfcUps
 
