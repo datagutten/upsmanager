@@ -6,7 +6,9 @@ from ups import select
 class Ups(models.Model):
     ip = models.GenericIPAddressField()
     community = models.CharField(default='public', max_length=200)
-    vendor = models.CharField(choices=[['APC', 'APC']], default='APC', max_length=20)
+    vendor = models.CharField(choices=[['Generic', 'Generic'], ['APC', 'APC'], ['Eaton', 'Eaton'],
+                                       ['APCSmartConnect', 'APC Smart Connect']], default='APC',
+                              max_length=20)
     name = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
