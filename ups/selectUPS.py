@@ -1,14 +1,15 @@
-from . import APCSmartConnectUPS, Eaton, RfcUps, ApcUps
+import ups
+
+vendors = {
+    'Generic': ups.RfcUps,
+    'APC': ups.ApcUps,
+    'Eaton': ups.Eaton,
+    'APCSmartConnect': ups.APCSmartConnectUPS,
+}
 
 
 def select(vendor):
-    if vendor == 'APC':
-        return ApcUps
-    elif vendor == 'APCSmartConnect':
-        return APCSmartConnectUPS
-    elif vendor == 'Eaton':
-        return Eaton
-    elif vendor == 'Generic':
-        return RfcUps
+    if vendor in vendors:
+        return vendors[vendor]
     else:
         raise AttributeError('Unsupported vendor: ' + vendor)
