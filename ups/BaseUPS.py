@@ -2,6 +2,9 @@ from abc import ABC
 
 
 class BaseUPS(ABC):
+    def manufacturer(self) -> str:
+        pass
+
     def name(self) -> str:
         """
         Get UPS host name

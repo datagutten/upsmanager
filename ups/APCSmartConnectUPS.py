@@ -24,6 +24,9 @@ class APCSmartConnectUPS(BaseUPS):
         self.ups = self.apc.gateway_info(key)
         self.details = self.apc.gateway_info_detail(key)
 
+    def manufacturer(self) -> str:
+        return 'APC'
+
     def name(self):
         return self.ups['name']
 

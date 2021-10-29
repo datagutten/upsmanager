@@ -11,6 +11,7 @@
     <tr>
         <th>UPS name</th>
         <th>IP</th>
+        <th>Manufacturer</th>
         <th>Model</th>
         <th>Status</th>
         <th>Battery</th>
@@ -25,6 +26,7 @@
             {% if not ups.error %}
                 <td>{{ ups.ups.name|default:ups.snmp.name }}</td>
                 <td>{{ ups.ups.ip }}</td>
+                <td>{{ ups.snmp.manufacturer }}</td>
                 <td title="{{ ups.snmp.battery_sku|default:"" }}">{{ ups.snmp.model }}</td>
                 <td>{{ ups.snmp.status_string|linebreaksbr }}</td>
                 {% if ups.snmp.battery %}
@@ -47,6 +49,7 @@
             {% else %}
                 <td>{{ ups.ups.name|default:"" }}</td>
                 <td>{{ ups.ups.ip }}</td>
+                <td>{{ ups.ups.vendor }}</td>
                 <td colspan="8" class="error">{{ ups.error }}</td>
             {% endif %}
         </tr>

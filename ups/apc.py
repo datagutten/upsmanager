@@ -2,6 +2,9 @@ from . import SnmpUps
 
 
 class ApcUps(SnmpUps):
+    def manufacturer(self) -> str:
+        return 'APC'
+
     def name(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.2.0')
 
