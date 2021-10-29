@@ -17,4 +17,4 @@ class Command(BaseCommand):
         snmp = ups.snmp()
         print(snmp.status())
         print(snmp.status_string())
-        print(ups.snmp_rfc().battery_voltage())
+        print(ups.snmp().battery_voltage())

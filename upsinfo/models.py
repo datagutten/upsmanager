@@ -1,6 +1,5 @@
 from django.db import models
 
-from ups import RfcUps
 from ups import select
 
 
@@ -19,9 +18,6 @@ class Ups(models.Model):
     def snmp(self):
         snmp_class = select(self.vendor)
         return snmp_class(self.ip, self.community)
-
-    def snmp_rfc(self):
-        return RfcUps(self.ip, self.community)
 
 
 class Status(models.Model):
