@@ -1,7 +1,7 @@
 from django.db import models
 
-from ups.rfc import RfcUps
-from ups.select import select
+from ups import RfcUps
+from ups import select
 
 
 class Ups(models.Model):

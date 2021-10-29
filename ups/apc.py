@@ -1,11 +1,7 @@
-try:
-    from ups import UpsInfo
-except ImportError:
-    from ups.ups import UpsInfo
-import re
+from . import SnmpUps
 
 
-class ApcUps(UpsInfo):
+class ApcUps(SnmpUps):
     def name(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.2.0')
 

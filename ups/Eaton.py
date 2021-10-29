@@ -1,4 +1,4 @@
-from ups.rfc import RfcUps
+from . import RfcUps
 
 
 class Eaton(RfcUps):

@@ -1,12 +1,9 @@
 import datetime
 
-try:
-    from ups import UpsInfo
-except ImportError:
-    from ups.ups import UpsInfo
+from . import SnmpUps
 
 
-class RfcUps(UpsInfo):
+class RfcUps(SnmpUps):
     # def status(self):
     #    return self.get()
 
