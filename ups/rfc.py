@@ -16,6 +16,8 @@ class RfcUps(SnmpUps):
     def battery_status(self):
         value = self.get('.1.3.6.1.2.1.33.1.2.1')
         values = {1: 'Unknown', 2: 'Normal', 3: 'Low battery'}
+        if value not in values:
+            return value
         return values[value]
 
     def output_source(self):
