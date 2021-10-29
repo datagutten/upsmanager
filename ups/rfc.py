@@ -1,26 +1,149 @@
 import datetime
+from typing import Optional
 
 from . import SnmpUps
 
 
 class RfcUps(SnmpUps):
-    # def status(self):
-    #    return self.get()
+    def manufacturer(self) -> str:
+        """
+        UPS-MIB::upsIdentManufacturer.0
+        @return: UPS manufacturer
+        """
+        return self.get('1.3.6.1.2.1.33.1.1.1.0')
 
-    def name(self):
-        return self.get('.1.3.6.1.2.1.33.1.1.5')
+    def model(self) -> str:
+        """
+        UPS-MIB::upsIdentModel.0
+        @return: UPS model
+        """
+        return self.get('1.3.6.1.2.1.33.1.1.2.0')
 
-    def model(self):
-        return self.get('.1.3.6.1.2.1.33.1.1.2')
+    def ups_software_version(self) -> str:
+        """
+        UPS-MIB::upsIdentUPSSoftwareVersion.0
+        @return: UPS software version
+        """
+        return self.get('1.3.6.1.2.1.33.1.1.3.0')
 
-    def battery_status(self):
-        value = self.get('.1.3.6.1.2.1.33.1.2.1')
+    def agent_software_version(self) -> str:
+        """
+        UPS-MIB::upsIdentAgentSoftwareVersion.0
+        @return: Agent software version
+        """
+        return self.get('1.3.6.1.2.1.33.1.1.4.0')
+
+    def name(self) -> str:
+        """
+        UPS-MIB::upsIdentName.0
+        @return: UPS name
+        """
+        return self.get('.1.3.6.1.2.1.33.1.1.5.0')
+
+    def battery_status(self) -> str:
+        """
+        UPS-MIB::upsBatteryStatus.0
+        @return: UPS battery status name
+        """
+        value = self.get('.1.3.6.1.2.1.33.1.2.1.0')
         values = {1: 'Unknown', 2: 'Normal', 3: 'Low battery'}
         if value not in values:
             return value
         return values[value]
 
+    def runtime(self) -> Optional[datetime.time]:
+        """
+        UPS-MIB::upsEstimatedMinutesRemaining.0
+        @return: Datetime object
+        """
+        total_minutes = self.get('.1.3.6.1.2.1.33.1.2.3.0')
+        if total_minutes is None or total_minutes < 0:
+            return None
+        hours = total_minutes // 60
+        minutes = total_minutes - (hours * 60)
+
+        return datetime.time(hour=hours, minute=minutes)
+
+    def battery(self) -> int:
+        """
+        UPS-MIB::upsEstimatedChargeRemaining
+        @return: Battery percentage
+        """
+        return self.get('1.3.6.1.2.1.33.1.2.4.0')
+
+    def battery_voltage(self) -> float:
+        """
+        UPS-MIB::upsBatteryVoltage.0
+        @return: Battery voltage (V)
+        """
+        voltage = self.get('.1.3.6.1.2.1.33.1.2.5.0')
+        if voltage:
+            return voltage / 10
+
+    def battery_current(self) -> float:
+        """
+        UPS-MIB::upsBatteryCurrent.0
+        @return: Battery current
+        """
+        current = self.get('1.3.6.1.2.1.33.1.2.6.0')
+        if current:
+            return current / 10
+
+    def battery_temperature(self) -> int:
+        """
+        UPS-MIB::upsBatteryTemperature.0
+        @return: Battery temperature in centigrade
+        """
+        return self.get('1.3.6.1.2.1.33.1.2.7.0')
+
+    def input_num_lines(self) -> int:
+        """
+        UPS-MIB::upsInputNumLines.0
+        @return: Number of phases
+        """
+        return self.get('1.3.6.1.2.1.33.1.3.2.0')
+
+    def input_frequency(self, phase=0) -> float:
+        """
+        UPS-MIB::upsInputFrequency.0
+        @param phase: Phase number, 0 for single phase UPS
+        @return: Input frequency
+        """
+        frequency = self.get('1.3.6.1.2.1.33.1.3.3.1.2.%d' % phase)
+        if frequency:
+            return frequency / 10
+
+    def input_voltage(self, phase=0) -> float:
+        """
+        UPS-MIB::upsInputVoltage.0
+        @param phase: Phase number, 0 for single phase UPS
+        @return: Input voltage (V)
+        """
+        return self.get('.1.3.6.1.2.1.33.1.3.3.1.3.%d' % phase)
+
+    def input_current(self, phase=0) -> float:
+        """
+        UPS-MIB::upsInputCurrent.0
+        @param phase: Phase number, 0 for single phase UPS
+        @return: Input current (A)
+        """
+        current = self.get('1.3.6.1.2.1.33.1.3.3.1.4.%d' % phase)
+        if current:
+            return current / 10
+
+    def input_true_power(self, phase=0) -> int:
+        """
+        UPS-MIB::upsInputTruePower.0
+        @param phase: Phase number, 0 for single phase UPS
+        @return: Input true power (W)
+        """
+        return self.get('1.3.6.1.2.1.33.1.3.3.1.5.%d' % phase)
+
     def output_source(self):
+        """
+        UPS-MIB::upsOutputSource.0
+        @return: Output source name
+        """
         values = {
             1: 'None',
             2: 'Other',
@@ -35,25 +158,29 @@ class RfcUps(SnmpUps):
         if status:
             return values[status]
 
-    def runtime(self):
-        total_minutes = self.get('.1.3.6.1.2.1.33.1.2.3.0')
-        hours = total_minutes // 60
-        minutes = total_minutes - (hours * 60)
+    def output_frequency(self) -> float:
+        """
+        UPS-MIB::upsOutputFrequency.0
+        @return: Output frequency (Hz)
+        """
+        frequency = self.get('1.3.6.1.2.1.33.1.4.2.0')
+        if frequency:
+            return frequency / 10
 
-        return datetime.time(hour=hours, minute=minutes)
+    def output_num_lines(self) -> int:
+        """
+        UPS-MIB::upsOutputNumLines.0
+        @return: Number of phases
+        """
+        return self.get('1.3.6.1.2.1.33.1.4.3.0')
 
-    def load(self, phase=1):
+    def load(self, phase=0) -> int:
+        """
+        UPS-MIB::upsOutputPercentLoad.0
+        @param phase: Phase number, 0 for single phase UPS
+        @return: Load percentage
+        """
         return self.get('.1.3.6.1.2.1.33.1.4.4.1.5.%d' % phase)
 
-    def status_string(self):
+    def status_string(self) -> str:
         return self.battery_status()
-
-    def battery_temperature(self):
-        return self.get('1.3.6.1.2.1.33.1.2.7')
-
-    def battery_voltage(self):
-        voltage = self.get('.1.3.6.1.2.1.33.1.2.5.0')
-        return int(voltage) / 10
-
-    def input_voltage(self, phase=1):
-        return self.get('.1.3.6.1.2.1.33.1.3.3.1.3.%d' % phase)
