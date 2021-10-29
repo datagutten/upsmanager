@@ -10,7 +10,7 @@ def ups_list(request):
             snmp_obj = ups.snmp()
             snmp_obj.name()
             snmp.append(snmp_obj)
-            info_list.append({'snmp': snmp_obj, 'snmp_rfc': ups.snmp_rfc(), 'ups': ups})
+            info_list.append({'snmp': snmp_obj, 'ups': ups})
         except ValueError as e:
             # snmp.append({'name': ups.name, 'status': 'Offline'})
             info_list.append({'ups': ups, 'error': e})
