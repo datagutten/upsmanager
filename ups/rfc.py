@@ -48,6 +48,9 @@ class RfcUps(SnmpUps):
     def status_string(self):
         return self.battery_status()
 
+    def battery_temperature(self):
+        return self.get('1.3.6.1.2.1.33.1.2.7')
+
     def battery_voltage(self):
         voltage = self.get('.1.3.6.1.2.1.33.1.2.5.0')
         return int(voltage) / 10

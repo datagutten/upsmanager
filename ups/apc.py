@@ -126,7 +126,7 @@ class ApcUps(SnmpUps):
     def time_on_battery(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0')
 
-    def temperature(self):
+    def battery_temperature(self):
         temperature_string = self.get('.1.3.6.1.4.1.318.1.1.1.2.3.2.0')
         if temperature_string:
             return int(temperature_string)/10

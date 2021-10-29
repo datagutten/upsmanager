@@ -52,7 +52,7 @@ class APCSmartConnectUPS(BaseUPS):
     def input_voltage(self):
         return self.details['input']['voltage']
 
-    def temperature(self):
+    def battery_temperature(self):
         return self.details['battery']['temperature']
 
     def runtime(self):
