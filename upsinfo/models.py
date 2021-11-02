@@ -21,6 +21,9 @@ class Ups(models.Model):
         snmp_class = select(self.vendor)
         return snmp_class(self.ip, self.community)
 
+    class Meta:
+        ordering = ['name']
+
 
 class Status(models.Model):
     ups = models.OneToOneField(Ups, on_delete=models.CASCADE)
