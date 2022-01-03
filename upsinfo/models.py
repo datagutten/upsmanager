@@ -4,7 +4,7 @@ from ups import select
 
 
 class Ups(models.Model):
-    ip = models.GenericIPAddressField()
+    ip = models.GenericIPAddressField(unique=True)
     community = models.CharField(default='public', max_length=200)
     vendor = models.CharField(choices=[['Generic', 'RFC 1628'], ['APC', 'APC'], ['Eaton', 'Eaton'],
                                        ['APCSmartConnect', 'APC Smart Connect']], default='Generic',
@@ -21,16 +21,19 @@ class Ups(models.Model):
         snmp_class = select(self.vendor)
         return snmp_class(self.ip, self.community)
 
+    def last_event(self):
+        return self.events.order_by('-time').first()
+
     class Meta:
         ordering = ['name']
 
 
 class Status(models.Model):
-    ups = models.OneToOneField(Ups, on_delete=models.CASCADE)
+    ups = models.OneToOneField(Ups, on_delete=models.CASCADE, related_name='status')
     status_time = models.DateTimeField(auto_now=True)
 
 
 class Event(models.Model):
-    ups = models.ForeignKey(Ups, on_delete=models.CASCADE)
+    ups = models.ForeignKey(Ups, on_delete=models.CASCADE, related_name='events')
     time = models.DateTimeField(auto_now_add=True)
     event = models.TextField()
