@@ -184,3 +184,6 @@ class RfcUps(SnmpUps):
 
     def status_string(self) -> str:
         return self.battery_status()
+
+    def status(self) -> str:
+        return self.battery_status()
