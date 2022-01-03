@@ -2,7 +2,7 @@ from pprint import pprint
 
 from django.core.management.base import BaseCommand
 
-from upsinfo.models import Ups
+from upsinfo.models import Event, Ups
 
 
 class Command(BaseCommand):
@@ -16,8 +16,18 @@ class Command(BaseCommand):
         for ups in Ups.objects.all():
             snmp = ups.snmp()
             # print(snmp.status())
-            print(ups)
+
             try:
-                print(snmp.status_string())
+                status = snmp.status()
+                strings = snmp.status_strings(status)
+                if not ups.last_event() or ups.last_event().event not in strings:
+                    for string in strings:
+                        event = Event(ups=ups, event=string)
+                        event.save()
             except ValueError as e:
                 print(e)
+            except AttributeError:
+                string = snmp.status_string()
+                if not ups.last_event() or ups.last_event().event != string:
+                    event = Event(ups=ups, event=string)
+                    event.save()
