@@ -17,3 +17,6 @@ class PowerWalkerEPPC(RfcUps):
 
     def input_true_power(self, phase=1):
         return super(PowerWalkerEPPC, self).input_true_power(phase)
+
+    def load(self, phase=1) -> int:
+        return super(PowerWalkerEPPC, self).load(phase)
