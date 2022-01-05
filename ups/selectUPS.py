@@ -5,6 +5,7 @@ vendors = {
     'APC': ups.ApcUps,
     'Eaton': ups.Eaton,
     'APCSmartConnect': ups.APCSmartConnectUPS,
+    'EPPC': ups.PowerWalkerEPPC,
 }
 
 

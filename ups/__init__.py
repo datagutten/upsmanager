@@ -6,5 +6,6 @@ from .APCSmartConnect import APCSmartConnect
 from .APCSmartConnectUPS import APCSmartConnectUPS
 from .Eaton import Eaton
 from .apc import ApcUps
+from .EPPC import PowerWalkerEPPC
 
 from .selectUPS import select
