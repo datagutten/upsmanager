@@ -7,8 +7,8 @@ class Ups(models.Model):
     ip = models.GenericIPAddressField(unique=True)
     community = models.CharField(default='public', max_length=200)
     vendor = models.CharField(choices=[['Generic', 'RFC 1628'], ['APC', 'APC'], ['Eaton', 'Eaton'],
-                                       ['APCSmartConnect', 'APC Smart Connect',
-                                        'EPPC', 'PowerWalker EPPC']
+                                       ['APCSmartConnect', 'APC Smart Connect'],
+                                       ['EPPC', 'PowerWalker EPPC'],
                                        ], default='Generic',
                               max_length=20)
     name = models.CharField(max_length=50, null=True, blank=True)
