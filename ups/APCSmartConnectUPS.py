@@ -9,7 +9,7 @@ from . import APCSmartConnect, BaseUPS
 class APCSmartConnectUPS(BaseUPS):
     def __init__(self, _, key):
         key = int(key)
-        super().__init__(key)
+        super().__init__()
         self.apc = APCSmartConnect()
         try:
             self._get_info(key)
