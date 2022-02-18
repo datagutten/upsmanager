@@ -6,5 +6,6 @@ from . import views
 
 app_name = 'upsinfo'
 urlpatterns = [
-    path('', views.ups_list, name='index')
+    path('', views.ups_list, name='index'),
+    path('events', views.events, name='events'),
 ]

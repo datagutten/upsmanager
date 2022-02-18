@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render
 from requests import HTTPError
 
 from .models import Ups
@@ -20,3 +21,17 @@ def ups_list(request):
             info_list.append({'ups': ups, 'error': e})
 
     return render(request, 'upsinfo/ups_list.html', {'ups_list': info_list})
+
+
+def events(request):
+    ip = request.GET.get('ip')
+    if ip:
+        ups = get_object_or_404(Ups, ip=ip)
+    else:
+        return HttpResponseBadRequest()
+    events_obj = ups.events.all().order_by('-time')
+    return render(request, 'upsinfo/event_log.html', {
+        'ups': ups,
+        'events': events_obj,
+        'title': 'UPS events: %s' % ups.name,
+    })

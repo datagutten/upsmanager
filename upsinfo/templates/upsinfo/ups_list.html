@@ -24,7 +24,7 @@
     {% for ups in ups_list %}
         <tr>
             {% if not ups.error %}
-                <td>{{ ups.ups.name|default:ups.snmp.name }}</td>
+                <td><a href="{% url 'upsinfo:events' %}?ip={{ ups.ups.ip }}">{{ ups.ups.name|default:ups.snmp.name }}</a></td>
                 <td>{{ ups.ups.ip }}</td>
                 <td>{{ ups.snmp.manufacturer }}</td>
                 <td title="{{ ups.snmp.battery_sku|default:"" }}">{{ ups.snmp.model }}</td>
@@ -49,7 +49,7 @@
                 <td>{{ ups.snmp.battery_temperature }} C</td>
                 <td>{{ ups.snmp.runtime|time:"H:i" }}</td>
             {% else %}
-                <td>{{ ups.ups.name|default:"" }}</td>
+                <td><a href="{% url 'upsinfo:events' %}?ip={{ ups.ups.ip }}">{{ ups.ups.name|default:"" }}</a></td>
                 <td>{{ ups.ups.ip }}</td>
                 <td>{{ ups.ups.vendor }}</td>
                 <td colspan="8" class="error">{{ ups.error }}</td>
