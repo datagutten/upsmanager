@@ -12,3 +12,6 @@ class UpsAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ['ups', 'time', 'event']
     list_filter = ['ups']
+
+
+admin.site.site_header = 'UPS administration'
