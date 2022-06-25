@@ -154,8 +154,10 @@ class RfcUps(SnmpUps):
             7: 'Reducer',
         }
 
-        status = self.get('.1.3.6.1.2.1.33.1.4.1')
-        if status:
+        status = self.get('.1.3.6.1.2.1.33.1.4.1.0')
+        if status not in values:
+            return status
+        elif status:
             return values[status]
 
     def output_frequency(self) -> float:
@@ -182,8 +184,5 @@ class RfcUps(SnmpUps):
         """
         return self.get('.1.3.6.1.2.1.33.1.4.4.1.5.%d' % phase)
 
-    def status_string(self) -> str:
-        return self.battery_status()
-
-    def status(self) -> str:
-        return self.battery_status()
+    def status_messages(self) -> list:
+        return [self.battery_status()]

@@ -18,8 +18,7 @@ class Command(BaseCommand):
             # print(snmp.status())
 
             try:
-                status = snmp.status()
-                strings = snmp.status_strings(status)
+                strings = snmp.status_messages()
                 if not ups.last_event() or ups.last_event().event not in strings:
                     for string in strings:
                         event = Event(ups=ups, event=string)

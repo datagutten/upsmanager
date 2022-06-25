@@ -1,4 +1,5 @@
 from . import SnmpUps
+import textwrap
 
 
 class ApcUps(SnmpUps):
@@ -35,14 +36,17 @@ class ApcUps(SnmpUps):
         return self.get('.1.3.6.1.4.1.318.1.1.1.11.1.1.0')
 
     @staticmethod
-    def parse_status(status):
-        import textwrap
+    def split_status(status):
         matches = textwrap.wrap(status, 1)
         return matches
 
     @staticmethod
-    def status_strings(value):
-        messages = ''
+    def parse_status(status: str) -> list:
+        """
+        Parse a status string to a list with readable status messages
+        @param status: Status string with 0 and 1
+        @return: List with status messages
+        """
         values = {
             1: 'Abnormal Condition Present',
             2: 'On Battery',
@@ -116,15 +120,8 @@ class ApcUps(SnmpUps):
                 strings.append(value)
         return strings
 
-    def status_string(self):
-        status = self.status()
-        if not status:
-            return ''
-        strings = self.status_strings(status)
-        messages = ''
-        for value in strings:
-            messages += value + "\n"
-        return messages
+    def status_messages(self) -> list:
+        return self.parse_status(self.status())
 
     def time_on_battery(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0')
@@ -141,8 +138,7 @@ class ApcUps(SnmpUps):
         return self.get('.1.3.6.1.4.1.318.1.1.1.4.2.3.0')
 
     def on_battery(self):
-        status = self.status()
-        strings = self.status_strings(status)
+        strings = self.status_messages()
         if "On Battery" in strings:
             return True
         else:

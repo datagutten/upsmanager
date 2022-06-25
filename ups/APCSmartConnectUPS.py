@@ -33,15 +33,15 @@ class APCSmartConnectUPS(BaseUPS):
     def model(self):
         return self.ups['model']
 
-    def status_string(self):
+    def status_messages(self):
         modes = {
             'online': 'Online'
         }
         status_key = self.ups['status']['upsOperatingMode']
         if status_key in modes:
-            return modes[status_key]
+            return [modes[status_key]]
         else:
-            return status_key
+            return [status_key]
 
     def load(self):
         return self.details['output']['loadRealPercentage']
