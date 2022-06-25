@@ -1,24 +1,35 @@
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
-from requests import HTTPError
 
+from ups import exceptions
 from .models import Ups
+
+connections = {}
+
+
+def ups_info(ups: Ups):
+    try:
+        if ups.id not in connections:
+            connections[ups.id] = ups.snmp()
+
+        snmp_obj = connections[ups.id]
+        if hasattr(snmp_obj, 'get_info'):
+            snmp_obj.get_info()
+
+        snmp_obj.name()
+        return {'snmp': snmp_obj, 'ups': ups}
+    except exceptions.UPSTimeout:
+        return {'ups': ups, 'error': 'Offline'}
+    except exceptions.UPSError as e:
+        return {'ups': ups, 'error': e}
 
 
 def ups_list(request):
-    snmp = []
     info_list = []
-    for ups in Ups.objects.all():
-        try:
-            snmp_obj = ups.snmp()
-            snmp_obj.name()
-            snmp.append(snmp_obj)
-            info_list.append({'snmp': snmp_obj, 'ups': ups})
-        except ValueError as e:
-            # snmp.append({'name': ups.name, 'status': 'Offline'})
-            info_list.append({'ups': ups, 'error': e})
-        except HTTPError as e:
-            info_list.append({'ups': ups, 'error': e})
+    for ups in Ups.objects.filter(enabled=True):
+        info_list.append(ups_info(ups))
+
+    return render(request, 'upsinfo/ups_list_ajax.html', {'ups_list': info_list})
 
     return render(request, 'upsinfo/ups_list.html', {'ups_list': info_list})
 

@@ -4,7 +4,7 @@ from abc import ABC
 
 import netsnmp
 
-from . import BaseUPS
+from ups import BaseUPS, exceptions
 
 
 class SnmpUps(BaseUPS, ABC):
@@ -14,10 +14,14 @@ class SnmpUps(BaseUPS, ABC):
         self.session = netsnmp.SNMPSession(ip, community, version=version, timeout=0.1)
 
     def get(self, oid):
+        # noinspection PyProtectedMember
         try:
             data = self.session.get(oid)
         except netsnmp._api.SNMPError as e:
-            raise ValueError(e)
+            if str(e).strip() == 'Timeout':
+                raise exceptions.UPSTimeout(e)
+            else:
+                raise exceptions.UPSError(e)
 
         data_type = data[0][1]
         value = data[0][2]
