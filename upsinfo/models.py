@@ -9,6 +9,7 @@ class Ups(models.Model):
     vendor = models.CharField(choices=[['Generic', 'RFC 1628'], ['APC', 'APC'], ['Eaton', 'Eaton'],
                                        ['APCSmartConnect', 'APC Smart Connect'],
                                        ['EPPC', 'PowerWalker EPPC'],
+                                       ['NextUPSSystems', 'NEXT UPS Systems'],
                                        ], default='Generic',
                               max_length=20)
     name = models.CharField(max_length=50, null=True, blank=True)
