@@ -113,7 +113,7 @@ class ApcUps(SnmpUps):
             63: '<Not Used>',
             64: '<Not Used>'}
 
-        matches = ApcUps.parse_status(value)
+        matches = ApcUps.split_status(status)
         strings = []
         for key, value in values.items():
             if matches[key-1] == '1':
