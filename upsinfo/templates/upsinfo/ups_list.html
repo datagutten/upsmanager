@@ -29,7 +29,7 @@
                 <td>{{ ups.snmp.manufacturer }}</td>
                 <td title="{{ ups.snmp.battery_sku|default:"" }}">{{ ups.snmp.model }}</td>
                 <td>{{ ups.snmp.status_string|linebreaksbr }}</td>
-                {% if ups.snmp.battery %}
+                {% if ups.snmp.battery != None %}
                     <td>
                         <meter id="battery" min="0" max="100" low="20" optimum="100"
                                value="{{ ups.snmp.battery }}"></meter>
@@ -41,7 +41,7 @@
                 <td>{{ ups.snmp.battery_voltage|default:"" }} V</td>
                 <td>{{ ups.snmp.input_voltage }} V</td>
                 <td>
-                    {% if ups.snmp.load %}
+                    {% if ups.snmp.load != None %}
                         <meter id="load" min="0" low="10" max="100" high="90" value="{{ ups.snmp.load }}"></meter>
                         {{ ups.snmp.load }}%
                     {% endif %}
