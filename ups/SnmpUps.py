@@ -1,12 +1,15 @@
 import datetime
 import re
+from abc import ABC
 
 import netsnmp
 
 from . import BaseUPS
 
 
-class SnmpUps(BaseUPS):
+class SnmpUps(BaseUPS, ABC):
+    session: netsnmp.SNMPSession
+
     def __init__(self, ip, community='public', version=0):
         self.session = netsnmp.SNMPSession(ip, community, version=version, timeout=0.1)
 
