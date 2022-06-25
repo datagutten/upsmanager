@@ -20,3 +20,37 @@ class BaseUPS(ABC):
 
     def runtime(self):
         raise NotImplementedError
+
+    def load(self) -> int:
+        """
+        UPS load
+        @return: UPS load in %
+        """
+        raise NotImplementedError
+
+    def battery_temperature(self) -> int:
+        """
+        @return: Battery temperature in centigrade
+        """
+        raise NotImplementedError
+
+    def battery(self) -> int:
+        """
+        Get battery charge level
+        @return: Battery charge level in %
+        """
+        raise NotImplementedError
+
+    def status_messages(self) -> list:
+        """
+        Get a list of status messages
+        @return: List of status messages
+        """
+        raise NotImplementedError
+
+    def status_string(self, separator='\n') -> str:
+        """
+        Get status messages joined to a string
+        @return: Joined status messages
+        """
+        return separator.join(self.status_messages())
