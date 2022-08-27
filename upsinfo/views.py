@@ -14,7 +14,12 @@ def ups_info(ups: Ups):
 
         snmp_obj = connections[ups.id]
         if hasattr(snmp_obj, 'get_info'):
-            snmp_obj.get_info()
+            try:
+                snmp_obj.get_info()
+            except exceptions.UPSError:
+                del connections[ups.id]
+                connections[ups.id] = ups.snmp()
+                snmp_obj = connections[ups.id]
 
         snmp_obj.name()
         return {'snmp': snmp_obj, 'ups': ups}
