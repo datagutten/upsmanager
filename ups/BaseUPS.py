@@ -1,4 +1,5 @@
 from abc import ABC
+from datetime import time
 
 
 class BaseUPS(ABC):
@@ -18,7 +19,11 @@ class BaseUPS(ABC):
         """
         raise NotImplementedError
 
-    def runtime(self):
+    def runtime(self) -> time:
+        """
+        Get UPS runtime
+        @return: Runtime as time object
+        """
         raise NotImplementedError
 
     def load(self) -> int:
@@ -41,6 +46,13 @@ class BaseUPS(ABC):
         """
         raise NotImplementedError
 
+    def battery_voltage(self) -> float:
+        """
+        Get battery voltage
+        @return: Battery voltage
+        """
+        raise NotImplementedError
+
     def status_messages(self) -> list:
         """
         Get a list of status messages
@@ -54,3 +66,10 @@ class BaseUPS(ABC):
         @return: Joined status messages
         """
         return separator.join(self.status_messages())
+
+    def input_voltage(self) -> int:
+        """
+        Get input voltage
+        @return: Input voltage
+        """
+        raise NotImplementedError
