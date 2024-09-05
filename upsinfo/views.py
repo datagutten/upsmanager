@@ -43,11 +43,12 @@ def ups_list(request):
 
 
 def events(request):
-    ip = request.GET.get('ip')
-    if ip:
-        ups = get_object_or_404(Ups, ip=ip)
+    ups_id = request.GET.get('id')
+    if ups_id:
+        ups = get_object_or_404(Ups, id=ups_id)
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('ID not specified')
+
     events_obj = ups.events.all().order_by('-time')
     return render(request, 'upsinfo/event_log.html', {
         'ups': ups,
