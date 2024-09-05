@@ -39,8 +39,6 @@ def ups_list(request):
     for ups in Ups.objects.filter(enabled=True):
         info_list.append(ups_info(ups))
 
-    return render(request, 'upsinfo/ups_list_ajax.html', {'ups_list': info_list})
-
     return render(request, 'upsinfo/ups_list.html', {'ups_list': info_list})
 
 
