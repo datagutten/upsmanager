@@ -1,8 +1,12 @@
+from datetime import timedelta, time
+
 from . import SnmpUps
 import textwrap
 
 
 class ApcUps(SnmpUps):
+    good_state = 'On Line'
+
     def manufacturer(self) -> str:
         return 'APC'
 
@@ -15,8 +19,17 @@ class ApcUps(SnmpUps):
     def battery(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.1.0')
 
-    def runtime(self):
+    def runtime(self) -> time:
+        """
+        upsAdvBatteryRunTimeRemaining
+        The UPS battery run time remaining before battery exhaustion.
+        """
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.3.0')
+
+    def runtime_seconds(self):
+        runtime = self.runtime()
+        runtime_delta = timedelta(seconds=runtime.second, minutes=runtime.minute, hours=runtime.hour)
+        return runtime_delta.total_seconds()
 
     def battery_status(self):
         value = self.get('.1.3.6.1.4.1.318.1.1.1.2.1.1.0')

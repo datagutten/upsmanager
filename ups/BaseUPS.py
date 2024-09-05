@@ -26,6 +26,18 @@ class BaseUPS(ABC):
         """
         raise NotImplementedError
 
+    def runtime_seconds(self):
+        if hasattr(self, 'runtime_minutes'):
+            return int(self.runtime_minutes()*60)
+        else:
+            raise NotImplementedError
+
+    def runtime_minutes(self):
+        if hasattr(self, 'runtime_seconds'):
+            return int(self.runtime_seconds()/60)
+        else:
+            raise NotImplementedError
+
     def load(self) -> int:
         """
         UPS load

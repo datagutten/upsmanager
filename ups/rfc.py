@@ -5,6 +5,8 @@ from . import SnmpUps
 
 
 class RfcUps(SnmpUps):
+    good_state = 'Normal'
+
     def manufacturer(self) -> str:
         """
         UPS-MIB::upsIdentManufacturer.0
@@ -50,6 +52,16 @@ class RfcUps(SnmpUps):
         if value not in values:
             return value
         return values[value]
+
+    def runtime_minutes(self) -> int:
+        """
+        UPS-MIB::upsEstimatedMinutesRemaining.0
+        @return: int
+        """
+        return self.get('.1.3.6.1.2.1.33.1.2.3.0')
+
+    def runtime_seconds(self) -> int:
+        return self.runtime_minutes() * 60
 
     def runtime(self) -> Optional[datetime.time]:
         """
