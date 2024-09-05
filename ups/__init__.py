@@ -7,5 +7,6 @@ from .APCSmartConnectUPS import APCSmartConnectUPS
 from .Eaton import Eaton
 from .apc import ApcUps
 from .EPPC import PowerWalkerEPPC
+from .NextUPSSystems import NextUPSSystems
 
 from .selectUPS import select
