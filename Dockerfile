@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3.12-bookworm as builder
+FROM python:3.8-buster as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -27,7 +27,7 @@ RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels gunicorn mysqlclient
 # FINAL #
 #########
 
-FROM python:3.12-bookworm
+FROM python:3.8-buster
 
 # create directory for the app user
 RUN mkdir -p /home/app
