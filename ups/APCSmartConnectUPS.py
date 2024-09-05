@@ -1,9 +1,10 @@
 import datetime
 
+from apc_smartconnect import APCSmartConnect
 from django.conf import settings
 from requests import HTTPError
 
-from . import APCSmartConnect, BaseUPS
+from ups import BaseUPS, exceptions
 
 
 class APCSmartConnectUPS(BaseUPS):
