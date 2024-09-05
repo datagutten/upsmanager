@@ -14,7 +14,7 @@ runtime = prometheus_client.Gauge('ups_runtime', 'UPS runtime in seconds', label
 status_string = prometheus_client.Info('ups_status_string', 'UPS status string', labels)
 
 
-def metrics():
+def metrics(request):
     for ups_obj in models.Ups.objects.filter(enabled=True):
         ups_labels = [ups_obj.name, ups_obj.ip]
         try:
