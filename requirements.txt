@@ -1,5 +1,5 @@
 apc-smartconnect
 requests
-Django
+Django~=4.1
 netsnmp-py==0.5.2
 prometheus_client
