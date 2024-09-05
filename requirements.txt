@@ -1,0 +1,4 @@
+apc-smartconnect
+requests
+Django~=4.0.5
+netsnmp-py
