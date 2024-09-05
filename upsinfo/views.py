@@ -8,6 +8,7 @@ connections = {}
 
 
 def ups_info(ups: Ups):
+    name = ups.name
     try:
         if ups.id not in connections:
             connections[ups.id] = ups.snmp()
@@ -21,12 +22,16 @@ def ups_info(ups: Ups):
                 connections[ups.id] = ups.snmp()
                 snmp_obj = connections[ups.id]
 
-        snmp_obj.name()
-        return {'snmp': snmp_obj, 'ups': ups}
+        # Always try to fetch name to trigger exception
+        snmp_name = snmp_obj.name()
+        if not name:
+            name = snmp_name
+
+        return {'snmp': snmp_obj, 'ups': ups, 'name': name}
     except exceptions.UPSTimeout:
-        return {'ups': ups, 'error': 'Offline'}
+        return {'ups': ups, 'name': name, 'error': 'Offline'}
     except exceptions.UPSError as e:
-        return {'ups': ups, 'error': e}
+        return {'ups': ups, 'name': name, 'error': e}
 
 
 def ups_list(request):
