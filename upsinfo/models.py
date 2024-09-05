@@ -13,6 +13,7 @@ class Ups(models.Model):
                                        ], default='Generic',
                               max_length=20)
     name = models.CharField(max_length=50, null=True, blank=True)
+    enabled = models.BooleanField(default=True)
 
     def __str__(self):
         if self.name:
