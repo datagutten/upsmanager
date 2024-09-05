@@ -22,6 +22,8 @@ class SnmpUps(BaseUPS, ABC):
                 raise exceptions.UPSTimeout(e)
             else:
                 raise exceptions.UPSError(e)
+        except Exception as e:
+            raise exceptions.UPSError(e)
 
         data_type = data[0][1]
         value = data[0][2]
