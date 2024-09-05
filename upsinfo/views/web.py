@@ -2,7 +2,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 
 from ups import exceptions
-from .models import Ups
+from upsinfo.models import Ups
 
 connections = {}
 
