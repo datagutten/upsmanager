@@ -9,7 +9,11 @@ battery_temperature = prometheus_client.Gauge('ups_battery_temperature', 'Batter
                                               labels)
 battery = prometheus_client.Gauge('ups_battery', 'UPS battery percentage', labels)
 battery_voltage = prometheus_client.Gauge('ups_battery_voltage', 'Battery voltage', labels)
+time_on_battery = prometheus_client.Gauge('ups_on_battery',
+                                          'The elapsed time in seconds since the UPS has switched to battery power',
+                                          labels)
 input_voltage = prometheus_client.Gauge('ups_input_voltage', 'UPS input voltage', labels)
+output_current = prometheus_client.Gauge('ups_output_current', 'UPS output current', labels)
 runtime = prometheus_client.Gauge('ups_runtime', 'UPS runtime in seconds', labels)
 status_string = prometheus_client.Info('ups_status_string', 'UPS status string', labels)
 
@@ -25,6 +29,8 @@ def metrics(request):
             battery.labels(*ups_labels).set(ups_snmp.battery())
             battery_voltage.labels(*ups_labels).set(ups_snmp.battery_voltage())
             input_voltage.labels(*ups_labels).set(ups_snmp.input_voltage())
+            output_current.labels(*ups_labels).set(ups_snmp.output_current())
+            time_on_battery.labels(*ups_labels).set(ups_snmp.time_on_battery().total_seconds())
             runtime.labels(*ups_labels).set(ups_snmp.runtime().total_seconds())
             status_string.labels(*ups_labels).info({'status': ups_snmp.status_string()})
         except Exception as e:

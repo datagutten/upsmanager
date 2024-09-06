@@ -48,6 +48,13 @@ class ApcUps(SnmpUps):
         # upsAdvStateAbnormalConditions
         return self.get('.1.3.6.1.4.1.318.1.1.1.11.1.1.0')
 
+    def output_current(self) -> float:
+        """
+        upsHighPrecOutputCurrent
+        The current in amperes drawn by the load on the UPS.
+        """
+        return self.get('.1.3.6.1.4.1.318.1.1.1.4.3.4.0') / 10
+
     @staticmethod
     def split_status(status):
         matches = textwrap.wrap(status, 1)
@@ -136,8 +143,8 @@ class ApcUps(SnmpUps):
     def status_messages(self) -> list:
         return self.parse_status(self.status())
 
-    def time_on_battery(self):
-        return self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0')
+    def time_on_battery(self) -> datetime.timedelta:
+        return self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0') # upsBasicBatteryTimeOnBattery
 
     def battery_temperature(self):
         temperature_string = self.get('.1.3.6.1.4.1.318.1.1.1.2.3.2.0')

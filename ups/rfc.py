@@ -53,16 +53,19 @@ class RfcUps(SnmpUps):
             return value
         return values[value]
 
-    def runtime(self) -> Optional[datetime.timedelta]:
-        """
-        UPS-MIB::upsEstimatedMinutesRemaining.0
-        @return: Datetime object
-        """
-        total_minutes = self.get('.1.3.6.1.2.1.33.1.2.3.0')
+    def runtime(self) -> datetime.timedelta:
+        total_minutes = self.get('.1.3.6.1.2.1.33.1.2.3.0')  # UPS-MIB::upsEstimatedMinutesRemaining.0
         if total_minutes is None or total_minutes < 0:
-            return None
+            total_minutes = 0
 
         return datetime.timedelta(minutes=total_minutes)
+
+    def time_on_battery(self) -> datetime.timedelta:
+        """
+        The elapsed time since the UPS has switched to battery power.
+        """
+        seconds = self.get('.1.3.6.1.4.1.318.1.1.1.2.1.2.0')  # upsSecondsOnBattery
+        return datetime.timedelta(seconds=seconds or 0)
 
     def battery(self) -> int:
         """
@@ -175,6 +178,12 @@ class RfcUps(SnmpUps):
         @return: Number of phases
         """
         return self.get('1.3.6.1.2.1.33.1.4.3.0')
+
+    def output_current(self) -> float:
+        try:
+            return self.get('.1.3.6.1.2.1.33.1.4.4.1.3.1') / 10
+        except TypeError:
+            return 0.0
 
     def load(self, phase=0) -> int:
         """

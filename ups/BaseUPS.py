@@ -41,6 +41,12 @@ class BaseUPS(ABC):
             return ''
         return '%02d:%02d' % (runtime.seconds // 3600, (runtime.seconds // 60) % 60)
 
+    def time_on_battery(self) -> datetime.timedelta:
+        """
+        The elapsed time since the UPS has switched to battery power.
+        """
+        raise NotImplementedError
+
     def load(self) -> int:
         """
         UPS load
@@ -86,5 +92,11 @@ class BaseUPS(ABC):
         """
         Get input voltage
         @return: Input voltage
+        """
+        raise NotImplementedError
+
+    def output_current(self) -> float:
+        """
+        The current in amperes drawn by the load on the UPS.
         """
         raise NotImplementedError
