@@ -59,10 +59,6 @@ class APCSmartConnectUPS(BaseUPS):
     def battery_temperature(self):
         return self.details['battery']['temperature']
 
-    def runtime(self):
+    def runtime(self) -> datetime.timedelta:
         seconds = self.details['battery']['runtimeRemaining']
-        total_minutes = int(seconds / 60)
-        hours = total_minutes // 60
-        minutes = total_minutes - (hours * 60)
-
-        return datetime.time(hour=hours, minute=minutes)
+        return datetime.timedelta(seconds=seconds)

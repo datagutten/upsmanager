@@ -1,5 +1,5 @@
+import datetime
 from abc import ABC
-from datetime import time
 
 
 class BaseUPS(ABC):
@@ -19,24 +19,27 @@ class BaseUPS(ABC):
         """
         raise NotImplementedError
 
-    def runtime(self) -> time:
+    def runtime(self) -> datetime.timedelta:
         """
         Get UPS runtime
-        @return: Runtime as time object
+        @return: Runtime as timedelta object
         """
         raise NotImplementedError
 
-    def runtime_seconds(self):
-        if hasattr(self, 'runtime_minutes'):
-            return int(self.runtime_minutes()*60)
-        else:
-            raise NotImplementedError
+    def runtime_minutes(self) -> int:
+        """
+        Runtime as total minutes
+        """
+        return int(self.runtime().total_seconds() // 60)
 
-    def runtime_minutes(self):
-        if hasattr(self, 'runtime_seconds'):
-            return int(self.runtime_seconds()/60)
-        else:
-            raise NotImplementedError
+    def runtime_string(self) -> str:
+        """
+        Format UPS run time as hour:minute string
+        """
+        runtime = self.runtime()
+        if runtime is None:
+            return ''
+        return '%02d:%02d' % (runtime.seconds // 3600, (runtime.seconds // 60) % 60)
 
     def load(self) -> int:
         """

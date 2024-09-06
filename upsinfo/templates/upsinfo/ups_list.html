@@ -47,7 +47,7 @@
                     {% endif %}
                 </td>
                 <td>{{ ups.snmp.battery_temperature }} C</td>
-                <td>{{ ups.snmp.runtime|time:"H:i" }}</td>
+                <td>{{ ups.snmp.runtime_string }}</td>
             {% else %}
                 <td><a href="{% url 'upsinfo:events' %}?id={{ ups.ups.id }}">{{ ups.ups.name|default:"" }}</a></td>
                 <td>{{ ups.ups.ip }}</td>

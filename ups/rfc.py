@@ -53,17 +53,7 @@ class RfcUps(SnmpUps):
             return value
         return values[value]
 
-    def runtime_minutes(self) -> int:
-        """
-        UPS-MIB::upsEstimatedMinutesRemaining.0
-        @return: int
-        """
-        return self.get('.1.3.6.1.2.1.33.1.2.3.0')
-
-    def runtime_seconds(self) -> int:
-        return self.runtime_minutes() * 60
-
-    def runtime(self) -> Optional[datetime.time]:
+    def runtime(self) -> Optional[datetime.timedelta]:
         """
         UPS-MIB::upsEstimatedMinutesRemaining.0
         @return: Datetime object
@@ -71,10 +61,8 @@ class RfcUps(SnmpUps):
         total_minutes = self.get('.1.3.6.1.2.1.33.1.2.3.0')
         if total_minutes is None or total_minutes < 0:
             return None
-        hours = total_minutes // 60
-        minutes = total_minutes - (hours * 60)
 
-        return datetime.time(hour=hours, minute=minutes)
+        return datetime.timedelta(minutes=total_minutes)
 
     def battery(self) -> int:
         """

@@ -1,4 +1,4 @@
-from datetime import timedelta, time
+import datetime
 
 from . import SnmpUps
 import textwrap
@@ -19,7 +19,7 @@ class ApcUps(SnmpUps):
     def battery(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.1.0')
 
-    def runtime(self) -> time:
+    def runtime(self) -> datetime.timedelta:
         """
         upsAdvBatteryRunTimeRemaining
         The UPS battery run time remaining before battery exhaustion.

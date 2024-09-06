@@ -25,7 +25,7 @@ def metrics(request):
             battery.labels(*ups_labels).set(ups_snmp.battery())
             battery_voltage.labels(*ups_labels).set(ups_snmp.battery_voltage())
             input_voltage.labels(*ups_labels).set(ups_snmp.input_voltage())
-            runtime.labels(*ups_labels).set(ups_snmp.runtime_seconds())
+            runtime.labels(*ups_labels).set(ups_snmp.runtime().total_seconds())
             status_string.labels(*ups_labels).info({'status': ups_snmp.status_string()})
         except Exception as e:
             status_string.labels(*ups_labels).info({'status': str(e)})

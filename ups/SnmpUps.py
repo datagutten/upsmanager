@@ -1,4 +1,5 @@
 import datetime
+from timedelta import Timedelta
 import re
 from abc import ABC
 
@@ -35,6 +36,6 @@ class SnmpUps(BaseUPS, ABC):
             return int(value)
         elif data_type == 'Timeticks':
             matches = re.match(r'([0-9]+):([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)', value)
-            return datetime.time(hour=int(matches[2]), minute=int(matches[3]),
-                                 second=int(matches[4]))
+            return datetime.timedelta(hours=int(matches[2]), minutes=int(matches[3]),
+                                      seconds=int(matches[4]))
         return None
