@@ -4,7 +4,8 @@ from apc_smartconnect import APCSmartConnect
 from django.conf import settings
 from requests import HTTPError
 
-from ups import BaseUPS, exceptions
+from ups import exceptions
+from .BaseUPS import BaseUPS
 
 
 class APCSmartConnectUPS(BaseUPS):

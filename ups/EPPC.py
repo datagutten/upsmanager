@@ -1,4 +1,4 @@
-from ups import RfcUps
+from .rfc import RfcUps
 
 
 class PowerWalkerEPPC(RfcUps):

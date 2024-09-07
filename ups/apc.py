@@ -1,6 +1,6 @@
 import datetime
 
-from . import SnmpUps
+from .SnmpUps import SnmpUps
 import textwrap
 
 

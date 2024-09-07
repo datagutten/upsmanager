@@ -1,7 +1,6 @@
 import datetime
-from typing import Optional
 
-from . import SnmpUps
+from .SnmpUps import SnmpUps
 
 
 class RfcUps(SnmpUps):
