@@ -8,3 +8,7 @@ class UPSTimeout(UPSError):
 
 class UPSAuthenticationError(UPSError):
     pass
+
+
+class UnsupportedUPSVendor(UPSError):
+    pass
