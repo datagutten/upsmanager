@@ -32,8 +32,11 @@ class ApcUps(SnmpUps):
         return runtime_delta.total_seconds()
 
     def battery_status(self):
+        """
+        upsBasicBatteryStatus
+        """
         value = self.get('.1.3.6.1.4.1.318.1.1.1.2.1.1.0')
-        values = {'1': 'Unknown', '2': 'Normal', '3': 'Low battery'}
+        values = {'1': 'Unknown', '2': 'Normal', '3': 'Low battery', '4': 'Fault'}
         return values[value]
 
     def battery_voltage(self):
