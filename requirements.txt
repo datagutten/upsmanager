@@ -1,6 +1,0 @@
-apc-smartconnect
-requests
-Django==4.1.13
-netsnmp-py==0.5.2
-prometheus_client
-easysnmp

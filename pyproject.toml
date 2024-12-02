@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "upsmanager"
+version = "0.1.0"
+description = "A django app to monitor UPS status"
+authors = ["datagutten <datagutten@datagutten.net>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "*"
+
+[tool.poetry.group.mysql.dependencies]
+mysqlclient = "^2"
+
+[tool.poetry.group.postgres.dependencies]
+psycopg2-binary = "^2"
+
+[tool.poetry.group.prometheus.dependencies]
+prometheus_client = "*"
+
+[tool.poetry.group.smartconnect.dependencies]
+python = "^3.10"
+requests = "^2"
+apc-smartconnect = { git = "https://github.com/datagutten/apc-smartconnect-py.git" }
+
+[tool.poetry.group.snmp.dependencies]
+ezsnmp = "^1.0.0"
+snmp-helper = { git = "https://github.com/datagutten/SNMP-helper-py.git" }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
