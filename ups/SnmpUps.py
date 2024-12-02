@@ -20,5 +20,7 @@ class SnmpUps(BaseUPS, ABC):
             return response.typed_value()
         except snmp_exceptions.SNMPTimeout as e:
             raise exceptions.UPSTimeout(e)
+        except snmp_exceptions.SNMPNoData:
+            return None
         except snmp_exceptions.SNMPError as e:
             raise exceptions.UPSError(e)
