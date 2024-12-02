@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3.8-buster as builder
+FROM python:3.12-bookworm AS builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -16,10 +16,11 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
 
 
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip poetry poetry-plugin-export
 
-COPY ./requirements.txt .
+COPY ./pyproject.toml .
 
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --with mysql --with snmp --with smartconnect --with prometheus
 RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels gunicorn mysqlclient
 
@@ -27,7 +28,7 @@ RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels gunicorn mysqlclient
 # FINAL #
 #########
 
-FROM python:3.8-buster
+FROM python:3.12-bookworm
 
 # create directory for the app user
 RUN mkdir -p /home/app
@@ -36,8 +37,8 @@ RUN mkdir -p /home/app
 RUN addgroup --system app && adduser --system --group app
 
 # create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
+ENV HOME /home/app
+ENV APP_HOME /home/app/web
 
 # install system dependencies
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
