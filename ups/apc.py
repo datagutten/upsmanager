@@ -11,13 +11,13 @@ class ApcUps(SnmpUps):
         return 'APC'
 
     def name(self):
-        return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.2.0')
+        return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.2.0')  # upsBasicIdentName
 
     def model(self):
-        return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.1.0')
+        return self.get('.1.3.6.1.4.1.318.1.1.1.1.1.1.0')  # upsBasicIdentModel
 
     def battery(self):
-        return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.1.0')
+        return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.1.0')  # upsAdvBatteryCapacity
 
     def runtime(self) -> datetime.timedelta:
         """
@@ -25,11 +25,6 @@ class ApcUps(SnmpUps):
         The UPS battery run time remaining before battery exhaustion.
         """
         return self.get('.1.3.6.1.4.1.318.1.1.1.2.2.3.0')
-
-    def runtime_seconds(self):
-        runtime = self.runtime()
-        runtime_delta = timedelta(seconds=runtime.second, minutes=runtime.minute, hours=runtime.hour)
-        return runtime_delta.total_seconds()
 
     def battery_status(self):
         """
@@ -160,10 +155,9 @@ class ApcUps(SnmpUps):
     def load(self):
         return self.get('.1.3.6.1.4.1.318.1.1.1.4.2.3.0')
 
-    def on_battery(self):
+    def on_battery(self) -> bool:
         strings = self.status_messages()
         if "On Battery" in strings:
             return True
         else:
             return False
-

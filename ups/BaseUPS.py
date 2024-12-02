@@ -1,8 +1,16 @@
 import datetime
 from abc import ABC
+from typing import Optional
 
 
 class BaseUPS(ABC):
+    # def __init__(self, community, username=None, password=None):
+    def close(self):
+        """
+        Close SNMP session or save cookies
+        """
+        raise NotImplementedError
+
     def manufacturer(self) -> str:
         raise NotImplementedError
 
@@ -41,11 +49,11 @@ class BaseUPS(ABC):
             return ''
         return '%02d:%02d' % (runtime.seconds // 3600, (runtime.seconds // 60) % 60)
 
-    def time_on_battery(self) -> datetime.timedelta:
+    def time_on_battery(self) -> Optional[datetime.timedelta]:
         """
         The elapsed time since the UPS has switched to battery power.
         """
-        raise NotImplementedError
+        return None
 
     def load(self) -> int:
         """
