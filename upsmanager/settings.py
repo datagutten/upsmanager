@@ -122,6 +122,9 @@ USE_TZ = True
 STATIC_URL = os.getenv("STATIC_URL", "/static/")
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+SMARTCONNECT_USERNAME = os.getenv("SMARTCONNECT_USERNAME")
+SMARTCONNECT_PASSWORD = os.getenv("SMARTCONNECT_PASSWORD")
+
 try:
     from .local_settings import *
 except ImportError:
