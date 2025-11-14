@@ -9,8 +9,8 @@ FROM python:3.12-bookworm AS builder
 WORKDIR /usr/src/app
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # install system dependencies
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
@@ -37,13 +37,11 @@ RUN mkdir -p /home/app
 RUN addgroup --system app && adduser --system --group app
 
 # create the appropriate directories
-ENV HOME /home/app
-ENV APP_HOME /home/app/web
+ENV APP_HOME=/home/app
 
 # install system dependencies
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
 
-RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/static
 WORKDIR $APP_HOME
 
