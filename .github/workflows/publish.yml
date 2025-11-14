@@ -52,3 +52,21 @@ jobs:
           subject-name: index.docker.io/datagutten/upsmanager
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+      - name: Build and push web Docker image
+        id: push_nginx
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: nginx
+          tags: |
+            datagutten/upsmanager-nginx:latest
+            ghcr.io/datagutten/upsmanager-nginx:latest
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: index.docker.io/datagutten/upsmanager-nginx
+          subject-digest: ${{ steps.push_nginx.outputs.digest }}
+          push-to-registry: true
