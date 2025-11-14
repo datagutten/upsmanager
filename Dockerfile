@@ -20,7 +20,7 @@ RUN pip install --upgrade pip poetry poetry-plugin-export
 
 COPY ./pyproject.toml .
 
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --with mysql --with snmp --with smartconnect --with prometheus
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --with mysql --with postgres --with snmp --with smartconnect --with prometheus
 RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels gunicorn mysqlclient
 
