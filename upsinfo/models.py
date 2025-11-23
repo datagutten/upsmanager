@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from ups import select
@@ -23,7 +24,14 @@ class Ups(models.Model):
 
     def snmp(self):
         snmp_class = select(self.vendor)
-        return snmp_class(self.ip, self.community)
+
+        if self.vendor == 'APCSmartConnect' and hasattr(settings, 'SMARTCONNECT_USERNAME'):
+            return snmp_class(key=self.community, username=settings.SMARTCONNECT_USERNAME,
+                              password=settings.SMARTCONNECT_PASSWORD)
+        elif self.vendor == 'NUT' and hasattr(settings, 'NUT_USERNAME'):
+            return snmp_class(self.ip, self.community, username=settings.NUT_USERNAME, password=settings.NUT_PASSWORD)
+        else:
+            return snmp_class(self.ip, self.community)
 
     def last_event(self):
         return self.events.order_by('-time').first()
