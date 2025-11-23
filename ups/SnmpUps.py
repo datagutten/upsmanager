@@ -3,7 +3,7 @@ from abc import ABC
 import snmp_compat.compat
 from snmp_compat import snmp_exceptions
 
-from ups import BaseUPS, exceptions
+from ups import BaseUPS, exceptions, snmp_utils
 
 
 class SnmpUps(BaseUPS, ABC):
@@ -24,3 +24,19 @@ class SnmpUps(BaseUPS, ABC):
             return None
         except snmp_exceptions.SNMPError as e:
             raise exceptions.UPSError(e)
+
+    def ups_output_table(self):
+        return snmp_utils.snmp_table_bulk(self.session, '.1.3.6.1.2.1.33.1.4.4.1',
+                                          {1: 'upsOutputLineIndex',
+                                           2: 'upsOutputVoltage',
+                                           3: 'upsOutputCurrent',
+                                           4: 'upsOutputPower',
+                                           5: 'upsOutputPercentLoad'})
+
+    def ups_input_table(self):
+        return snmp_utils.snmp_table_bulk(self.session, '.1.3.6.1.2.1.33.1.3.3.1',
+                                          {1: 'upsInputLineIndex',
+                                           2: 'upsInputFrequency',
+                                           3: 'upsInputVoltage',
+                                           4: 'upsInputCurrent',
+                                           5: 'upsInputTruePower'})
