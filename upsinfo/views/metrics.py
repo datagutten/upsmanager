@@ -39,17 +39,17 @@ class UPSMetrics:
             ups_labels = [ups_obj.name, ups_obj.ip]
             try:
                 ups_snmp = ups_obj.snmp()
-
-                self.battery_temperature.labels(*ups_labels).set(ups_snmp.battery_temperature())
-                self.battery.labels(*ups_labels).set(ups_snmp.battery())
-                self.battery_voltage.labels(*ups_labels).set(ups_snmp.battery_voltage())
-
-                self.time_on_battery.labels(*ups_labels).set(ups_snmp.time_on_battery().total_seconds())
-                self.runtime.labels(*ups_labels).set(ups_snmp.runtime().total_seconds())
-                self.status_string.labels(*ups_labels).info({'status': ups_snmp.status_string()})
             except Exception as e:
                 self.status_string.labels(*ups_labels).info({'status': str(e)})
                 continue
+
+            self.battery_temperature.labels(*ups_labels).set(ups_snmp.battery_temperature())
+            self.battery.labels(*ups_labels).set(ups_snmp.battery())
+            self.battery_voltage.labels(*ups_labels).set(ups_snmp.battery_voltage())
+
+            self.time_on_battery.labels(*ups_labels).set(ups_snmp.time_on_battery().total_seconds())
+            self.runtime.labels(*ups_labels).set(ups_snmp.runtime().total_seconds())
+            self.status_string.labels(*ups_labels).info({'status': ups_snmp.status_string()})
 
             try:
                 strings = ups_snmp.status_messages()

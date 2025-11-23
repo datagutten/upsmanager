@@ -10,6 +10,8 @@ class SnmpUps(BaseUPS, ABC):
     def __init__(self, ip, community='public'):
         snmp = snmp_compat.compat.select('ezsnmp')
         self.session = snmp(ip, community, timeout=0.1)
+        # Try to get sysName to check connection
+        self.name = self.session.get('1.3.6.1.2.1.1.5.0')
 
     def close(self):
         self.session.close()
