@@ -34,6 +34,18 @@ class UPSMetrics:
         self.output_power = prometheus_client.Gauge('ups_output_power', 'UPS output true power', labels_phase)
         self.output_load = prometheus_client.Gauge('ups_load', 'UPS load percentage', labels_phase)
 
+    def _phase_table(self, snmp_table: dict, fields: dict, ups_obj: models.Ups):
+        for phase, data in snmp_table.items():
+            ups_labels = [ups_obj.name, ups_obj.ip, phase]
+            for metric_key, snmp_field in fields.items():
+                if snmp_field not in data or data[snmp_field] is None:
+                    continue
+                metric = getattr(self, metric_key).labels(*ups_labels)
+                if metric_key.find('frequency') > -1:
+                    metric.set(data[snmp_field] / 10)
+                else:
+                    metric.set(data[snmp_field])
+
     def metrics(self, request):
         for ups_obj in models.Ups.objects.filter(enabled=True):
             ups_labels = [ups_obj.name, ups_obj.ip]
@@ -61,27 +73,19 @@ class UPSMetrics:
                 pass
 
             input_table = ups_snmp.ups_input_table()
-            for phase, data in input_table.items():
-                ups_labels = [ups_obj.name, ups_obj.ip, phase]
-                try:
-                    self.input_frequency.labels(*ups_labels).set(data['upsInputFrequency'] / 10)
-                    self.input_voltage.labels(*ups_labels).set(data['upsInputVoltage'])
-                    self.input_current.labels(*ups_labels).set(data['upsInputCurrent'])
-                    self.input_power.labels(*ups_labels).set(data['upsInputTruePower'])
-                except RuntimeError as e:
-                    pass
+            fields_input = {'input_frequency': 'upsInputFrequency',
+                            'input_voltage': 'upsInputVoltage',
+                            'input_current': 'upsInputCurrent',
+                            'input_power': 'upsInputTruePower', }
+            self._phase_table(input_table, fields_input, ups_obj)
+
+            fields_output = {'output_voltage': 'upsOutputVoltage',
+                             'output_current': 'upsOutputCurrent',
+                             'output_power': 'upsOutputPower',
+                             'output_load': 'upsOutputPercentLoad', }
 
             output_table = ups_snmp.ups_output_table()
-            for phase, data in output_table.items():
-                ups_labels = [ups_obj.name, ups_obj.ip, phase]
-                try:
-                    self.output_voltage.labels(*ups_labels).set(data['upsOutputVoltage'])
-                    self.output_current.labels(*ups_labels).set(data['upsOutputCurrent'])
-                    self.output_power.labels(*ups_labels).set(data['upsOutputPower'])
-                    self.output_load.labels(*ups_labels).set(data['upsOutputPercentLoad'])
-
-                except RuntimeError as e:
-                    pass
+            self._phase_table(output_table, fields_output, ups_obj)
 
         output = prometheus_client.generate_latest()
         return HttpResponse(output, content_type='text/plain', charset='utf-8')
